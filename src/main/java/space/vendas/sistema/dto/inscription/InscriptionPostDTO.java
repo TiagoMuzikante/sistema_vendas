@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import space.vendas.sistema.domain.paymentStatus;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -14,7 +15,8 @@ import java.time.LocalDateTime;
 @Builder
 public class InscriptionPostDTO {
 
-  private Integer event_id;
+  private Long event_id;
+  private UUID user_id;
   private paymentStatus paymentStatus;
   private LocalDateTime created_at;
   private LocalDateTime updated_at;

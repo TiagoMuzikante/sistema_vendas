@@ -4,40 +4,44 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import space.vendas.sistema.domain.Inscription;
 import space.vendas.sistema.dto.inscription.InscriptionPostDTO;
+import space.vendas.sistema.dto.inscription.InscriptionSimple;
+import space.vendas.sistema.service.InscriptionService;
 
 import java.util.List;
 
-@RequestMapping("api/v1/Inscricoes")
 @RestController
+@RequestMapping("/api/v1/inscricoes")
 @RequiredArgsConstructor
 public class InscriptionController {
 
   private final InscriptionService inscriptionService;
 
   @PostMapping
-  public ResponseEntity<InscriptionPostDTO> save(@ResponseBody InscriptionPostDTO inscriptionPostDTO){
+  public ResponseEntity<InscriptionSimple> save(@RequestBody InscriptionPostDTO inscriptionPostDTO){
     return new ResponseEntity<>(inscriptionService.save(inscriptionPostDTO), HttpStatus.CREATED);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<InscriptionPostDTO> findById(@PathVariable Long id){
+  public ResponseEntity<InscriptionSimple> findById(@PathVariable Long id){
     return ResponseEntity.ok(inscriptionService.findById(id));
   }
 
   @GetMapping
-  public ResponseEntity<List<InscriptionPostDTO>> findAll(){
+  public ResponseEntity<List<InscriptionSimple>> findAll(){
     return ResponseEntity.ok(inscriptionService.findAll());
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<InscriptionPostDTO> replace(@PathVariable Long id, @RequestBody InscriptionPostDTO inscriptionPostDTO){
-    return ResponseEntity.ok(inscriptionService.replace(id, inscriptionPostDTO));
+  public ResponseEntity<InscriptionSimple> replace(@PathVariable Long id, @RequestBody InscriptionPostDTO inscriptionPostDTO){
+    return ResponseEntity.ok(inscriptionService.update(id, inscriptionPostDTO));
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> destroy(@PathVariable Long id){
     inscriptionService.destroy(id);
+    return null;
   }
 
 }
