@@ -4,40 +4,44 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import space.vendas.sistema.domain.User;
 import space.vendas.sistema.dto.user.UserPostDTO;
+import space.vendas.sistema.service.UserService;
 
 import java.util.List;
+import java.util.UUID;
 
-@RequestMapping("/api/v1/users")
 @RestController
+@RequestMapping("/api/v1/usuarios")
 @RequiredArgsConstructor
 public class UserController {
 
   private final UserService userService;
 
   @PostMapping
-  public ResponseEntity<UserPostDTO> save(@ResponseBody UserPostDTO userPostDTO){
+  public ResponseEntity<User> save(@RequestBody UserPostDTO userPostDTO){
     return new ResponseEntity<>(userService.save(userPostDTO), HttpStatus.CREATED);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<UserPostDTO> findById(@PathVariable Long id){
+  public ResponseEntity<User> findById(@PathVariable UUID id){
     return ResponseEntity.ok(userService.findById(id));
   }
 
   @GetMapping
-  public ResponseEntity<List<UserPostDTO>> findAll(){
+  public ResponseEntity<List<User>> findAll(){
     return ResponseEntity.ok(userService.findAll());
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<UserPostDTO> replace(@PathVariable Long id, @RequestBody UserPostDTO userPostDTO){
-    return ResponseEntity.ok(userService.replace(id, userPostDTO));
+  public ResponseEntity<User> replace(@PathVariable UUID id, @RequestBody UserPostDTO userPostDTO){
+    return ResponseEntity.ok(userService.update(id, userPostDTO));
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> destroy(@PathVariable Long id){
+  public ResponseEntity<Void> destroy(@PathVariable UUID id){
     userService.destroy(id);
+    return null;
   }
 
 }

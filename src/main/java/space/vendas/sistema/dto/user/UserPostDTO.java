@@ -14,9 +14,9 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 public class UserPostDTO {
+  private String name;
   private String email;
   private String password;
-  private String name;
   private String phone_number;
   private String document_cpf;
   private UserType type;
