@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import space.vendas.sistema.domain.Evento;
-import space.vendas.sistema.dto.event.EventPostDTO;
+import space.vendas.sistema.dto.event.EventDTO;
 import space.vendas.sistema.service.EventoService;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class EventController {
   private final EventoService eventService;
 
   @PostMapping
-  public ResponseEntity<Evento> save(@RequestBody EventPostDTO eventPostDTO){
+  public ResponseEntity<Evento> save(@RequestBody EventDTO eventPostDTO){
     return new ResponseEntity<>(eventService.save(eventPostDTO), HttpStatus.CREATED);
   }
 
@@ -33,7 +33,7 @@ public class EventController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Evento> replace(@PathVariable Long id, @RequestBody EventPostDTO eventPostDTO){
+  public ResponseEntity<Evento> replace(@PathVariable Long id, @RequestBody EventDTO eventPostDTO){
     return ResponseEntity.ok(eventService.update(id,eventPostDTO));
   }
 

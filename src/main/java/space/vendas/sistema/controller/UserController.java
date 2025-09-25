@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import space.vendas.sistema.domain.User;
-import space.vendas.sistema.dto.user.UserPostDTO;
+import space.vendas.sistema.dto.user.UserDTO;
 import space.vendas.sistema.service.UserService;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class UserController {
   private final UserService userService;
 
   @PostMapping
-  public ResponseEntity<User> save(@RequestBody UserPostDTO userPostDTO){
+  public ResponseEntity<User> save(@RequestBody UserDTO userPostDTO){
     return new ResponseEntity<>(userService.save(userPostDTO), HttpStatus.CREATED);
   }
 
@@ -34,7 +34,7 @@ public class UserController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<User> replace(@PathVariable UUID id, @RequestBody UserPostDTO userPostDTO){
+  public ResponseEntity<User> replace(@PathVariable UUID id, @RequestBody UserDTO userPostDTO){
     return ResponseEntity.ok(userService.update(id, userPostDTO));
   }
 

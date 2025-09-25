@@ -1,9 +1,12 @@
 package space.vendas.sistema.service;
 
+import com.fasterxml.jackson.databind.util.BeanUtil;
+import jdk.jfr.Event;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import space.vendas.sistema.domain.Evento;
-import space.vendas.sistema.dto.event.EventPostDTO;
+import space.vendas.sistema.dto.event.EventDTO;
 import space.vendas.sistema.repository.EventRepository;
 
 import java.time.LocalDateTime;
@@ -15,18 +18,8 @@ public class EventoService {
 
   private final EventRepository eventRepository;
 
-  public Evento save(EventPostDTO dto){
-    Evento event = Evento.builder()
-        .name(dto.getName())
-        .description(dto.getDescription())
-        .type(dto.getType())
-        .address(dto.getAddress())
-        .date_start(dto.getDate_start())
-        .date_end(dto.getDate_end())
-        .link_event(dto.getLink_event())
-        .link_image(dto.getLink_image())
-        .build();
-    return eventRepository.save(event);
+  public Evento save(EventDTO dto){
+    return eventRepository.save(toEntity(dto));
   }
 
   public Evento findById(Long id){
@@ -37,20 +30,22 @@ public class EventoService {
     return eventRepository.findAll();
   }
 
-  public Evento update(Long id, EventPostDTO dto){
-    Evento event = Evento.builder()
-        .id(id)
-        .name(dto.getName())
-        .description(dto.getDescription())
-        .type(dto.getType())
-        .address(dto.getAddress())
-        .date_start(dto.getDate_start())
-        .date_end(dto.getDate_end())
-        .link_event(dto.getLink_event())
-        .link_image(dto.getLink_image())
-        .updated_at(LocalDateTime.now())
-        .build();
-    return eventRepository.save(event);
+  private Evento toEntity(EventDTO dto){
+    Evento event = new Evento();
+    BeanUtils.copyProperties(dto, event);
+    return event;
+  }
+
+  private EventDTO toDto(Evento evento){
+    EventDTO dto = new EventDTO();
+    BeanUtils.copyProperties(evento, dto);
+    return dto;
+  }
+
+  public Evento update(Long id, EventDTO dto){
+    Evento evento = toEntity(dto);
+    evento.setId(id);
+    return eventRepository.save(evento);
   }
 
   public void destroy(Long id){

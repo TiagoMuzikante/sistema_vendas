@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import space.vendas.sistema.domain.Inscription;
-import space.vendas.sistema.dto.inscription.InscriptionPostDTO;
-import space.vendas.sistema.dto.inscription.InscriptionSimple;
+import space.vendas.sistema.dto.inscription.InscriptionDTO;
 import space.vendas.sistema.service.InscriptionService;
 
 import java.util.List;
@@ -19,7 +17,7 @@ public class InscriptionController {
   private final InscriptionService inscriptionService;
 
   @PostMapping
-  public ResponseEntity<InscriptionSimple> save(@RequestBody InscriptionPostDTO inscriptionPostDTO){
+  public ResponseEntity<InscriptionSimple> save(@RequestBody InscriptionDTO inscriptionPostDTO){
     return new ResponseEntity<>(inscriptionService.save(inscriptionPostDTO), HttpStatus.CREATED);
   }
 
@@ -34,7 +32,7 @@ public class InscriptionController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<InscriptionSimple> replace(@PathVariable Long id, @RequestBody InscriptionPostDTO inscriptionPostDTO){
+  public ResponseEntity<InscriptionSimple> replace(@PathVariable Long id, @RequestBody InscriptionDTO inscriptionPostDTO){
     return ResponseEntity.ok(inscriptionService.update(id, inscriptionPostDTO));
   }
 

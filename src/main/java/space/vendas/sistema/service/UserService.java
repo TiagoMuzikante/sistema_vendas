@@ -1,10 +1,12 @@
 package space.vendas.sistema.service;
 
 import lombok.RequiredArgsConstructor;
-import org.hibernate.sql.Update;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import space.vendas.sistema.domain.Evento;
 import space.vendas.sistema.domain.User;
-import space.vendas.sistema.dto.user.UserPostDTO;
+import space.vendas.sistema.dto.event.EventDTO;
+import space.vendas.sistema.dto.user.UserDTO;
 import space.vendas.sistema.repository.UserRepository;
 
 import java.time.LocalDateTime;
@@ -18,20 +20,11 @@ public class UserService {
 
   private final UserRepository userRepository;
 
-  public User save(UserPostDTO dto){
-    User user = User.builder()
-        .name(dto.getName())
-        .email(dto.getEmail())
-        .password(dto.getPassword())
-        .phone_number(dto.getPhone_number())
-        .document_cpf(dto.getDocument_cpf())
-        .type(dto.getType())
-        .birthday(dto.getBirthday())
-        .build();
-    return userRepository.save(user);
+  public UserDTO save(UserDTO dto){
+    return toDto(userRepository.save(toEntity(dto)));
   }
 
-  public User findById(UUID id){
+  public User findById(Long id){
     User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario não encontrado"));
     user.setPassword("");
     return user;
@@ -46,24 +39,26 @@ public class UserService {
     return users;
   }
 
-  public User update(UUID id, UserPostDTO dto){
-    User user = User.builder()
-        .id(id)
-        .name(dto.getName())
-        .email(dto.getEmail())
-        .password(dto.getPassword())
-        .phone_number(dto.getPhone_number())
-        .document_cpf(dto.getDocument_cpf())
-        .type(dto.getType())
-        .birthday(dto.getBirthday())
-        .updated_at(LocalDateTime.now())
-        .build();
-    User updated = userRepository.save(user);
-    updated.setPassword("");
-    return updated;
+  private User toEntity(UserDTO dto){
+    User user = new User();
+    BeanUtils.copyProperties(dto, user);
+    return user;
   }
 
-  public void destroy(UUID id){
+  private UserDTO toDto(User user){
+    UserDTO dto = new UserDTO();
+    BeanUtils.copyProperties(user, dto);
+    return dto;
+  }
+
+  public UserDTO update(Long id, UserDTO dto){
+    User user = toEntity(dto);
+    user.setId(id);
+    user.setPassword("");
+    return toDto(userRepository.save(user));
+  }
+
+  public void destroy(Long id){
     userRepository.deleteById(id);
   }
 

@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import space.vendas.sistema.enums.EventEnum;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -16,29 +20,45 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "event")
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 public class Evento {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Column(nullable = false)
-  private String name;
-  @Column(nullable = false)
-  private String description;
-  @Column(nullable = false)
-  @Enumerated(EnumType.STRING)
-  private EventEnum type;
-  @Column(nullable = false)
-  private String address;
-  @Column(nullable = false)
-  private Date date_start;
-  @Column(nullable = false)
-  private Date date_end;
-  private String link_event;
-  private String link_image;
-  private LocalDateTime created_at;
-  private LocalDateTime updated_at;
 
+  @Column(nullable = false, length = 150)
+  private String name;
+
+  @Column(nullable = false, length = 500)
+  private String description;
+
+  @Column(nullable = false)
+  @Enumerated(EnumType.ORDINAL)
+  private EventEnum type;
+
+  @Column(nullable = false, length = 150)
+  private String address;
+
+  @Column(nullable = false)
+  private Date dateStart;
+
+  @Column(nullable = false)
+  private Date dateEnd;
+
+  @Column(nullable = true)
+  private String linkEvent;
+
+  @Column(nullable = true)
+  private String linkImage;
+
+  @CreatedDate
+  @Column(updatable = false, nullable = false)
+  private LocalDateTime createdAt;
+
+  @LastModifiedDate
+  @Column(updatable = true, nullable = false)
+  private LocalDateTime updatedAt;
 
   @OneToMany(mappedBy = "event")
   private List<Inscription> inscriptions;

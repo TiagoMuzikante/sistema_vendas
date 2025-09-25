@@ -1,4 +1,4 @@
-package space.vendas.sistema.domain;
+package space.vendas.sistema.enums;
 
 public enum EventEnum {
   CONGRESSO,

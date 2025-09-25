@@ -1,16 +1,15 @@
 package space.vendas.sistema.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import space.vendas.sistema.domain.Inscription;
-import space.vendas.sistema.dto.inscription.InscriptionPostDTO;
-import space.vendas.sistema.dto.inscription.InscriptionSimple;
+import space.vendas.sistema.dto.inscription.InscriptionDTO;
 import space.vendas.sistema.repository.EventRepository;
 import space.vendas.sistema.repository.InscriptionRepository;
 import space.vendas.sistema.repository.UserRepository;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,40 +22,36 @@ public class InscriptionService {
   private final EventRepository eventRepository;
   private final UserRepository userRepository;
 
-  public InscriptionSimple save(InscriptionPostDTO dto){
-    Inscription inscription = Inscription.builder()
-        .event(eventRepository.findById(dto.getEvent_id()).orElseThrow(() -> new RuntimeException("Evento não encontrado")))
-        .paymentStatus(dto.getPaymentStatus())
-        .user(userRepository.findById(dto.getUser_id()).orElseThrow(() -> new RuntimeException("Usuario não encontrado")))
-        .created_at(dto.getCreated_at())
-        .updated_at(dto.getUpdated_at())
-        .build();
-    Inscription saved = inscriptionRepository.save(inscription);
-    return new InscriptionSimple(saved.getId(), saved.getEvent().getName(), saved.getUser().getName(), Date.from(saved.getCreated_at().atZone(ZoneId.systemDefault()).toInstant()));
+  public InscriptionDTO save(InscriptionDTO dto){
+    return toDto(inscriptionRepository.save(toEntity(dto)));
   }
 
-  public InscriptionSimple findById(Long id){
-    Inscription saved = inscriptionRepository.findById(id).orElseThrow(() -> new RuntimeException("Inscrição não encontrada"));
-    return new InscriptionSimple(saved.getId(), saved.getEvent().getName(), saved.getUser().getName(), Date.from(saved.getCreated_at().atZone(ZoneId.systemDefault()).toInstant()));
+  public InscriptionDTO findById(Long id){
+    return toDto(inscriptionRepository.findById(id).orElseThrow(() -> new RuntimeException("Inscrição nao encontrada.")));
   }
 
-  public List<InscriptionSimple> findAll(){
+  public List<InscriptionDTO> findAll(){
     return inscriptionRepository.findAll().stream()
-        .map(aux -> new InscriptionSimple(aux.getId(), aux.getEvent().getName(), aux.getUser().getName(), Date.from(aux.getCreated_at().atZone(ZoneId.systemDefault()).toInstant())))
+        .map(this::toDto)
         .collect(Collectors.toList());
   }
 
-  public InscriptionSimple update(Long id, InscriptionPostDTO dto){
-    Inscription inscription = Inscription.builder()
-        .id(id)
-        .event(eventRepository.findById(dto.getEvent_id()).orElseThrow(() -> new RuntimeException("Evento não encontrado")))
-        .user(userRepository.findById(dto.getUser_id()).orElseThrow(() -> new RuntimeException("Usuario não encontrado")))
-        .paymentStatus(dto.getPaymentStatus())
-        .updated_at(dto.getUpdated_at())
-        .created_at(inscriptionRepository.findById(id).get().getCreated_at())
-        .build();
-    Inscription saved = inscriptionRepository.save(inscription);
-    return new InscriptionSimple(saved.getId(), saved.getEvent().getName(), saved.getUser().getName(), Date.from(saved.getCreated_at().atZone(ZoneId.systemDefault()).toInstant()));
+  private Inscription toEntity(InscriptionDTO dto){
+    Inscription inscription = new Inscription();
+    BeanUtils.copyProperties(dto, inscription);
+    return inscription;
+  }
+
+  private InscriptionDTO toDto(Inscription inscription){
+    InscriptionDTO dto = new InscriptionDTO();
+    BeanUtils.copyProperties(inscription, dto);
+    return dto;
+  }
+
+  public InscriptionDTO update(Long id, InscriptionDTO dto){
+    Inscription inscription = toEntity(dto);
+    inscription.setId(id);
+    return toDto(inscriptionRepository.save(inscription));
   }
 
   public void destroy(Long id){
