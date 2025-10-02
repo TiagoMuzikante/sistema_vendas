@@ -17,22 +17,22 @@ public class InscriptionController {
   private final InscriptionService inscriptionService;
 
   @PostMapping
-  public ResponseEntity<InscriptionSimple> save(@RequestBody InscriptionDTO inscriptionPostDTO){
+  public ResponseEntity<InscriptionDTO> save(@RequestBody InscriptionDTO inscriptionPostDTO){
     return new ResponseEntity<>(inscriptionService.save(inscriptionPostDTO), HttpStatus.CREATED);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<InscriptionSimple> findById(@PathVariable Long id){
+  public ResponseEntity<InscriptionDTO> findById(@PathVariable Long id){
     return ResponseEntity.ok(inscriptionService.findById(id));
   }
 
   @GetMapping
-  public ResponseEntity<List<InscriptionSimple>> findAll(){
+  public ResponseEntity<List<InscriptionDTO>> findAll(){
     return ResponseEntity.ok(inscriptionService.findAll());
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<InscriptionSimple> replace(@PathVariable Long id, @RequestBody InscriptionDTO inscriptionPostDTO){
+  public ResponseEntity<InscriptionDTO> replace(@PathVariable Long id, @RequestBody InscriptionDTO inscriptionPostDTO){
     return ResponseEntity.ok(inscriptionService.update(id, inscriptionPostDTO));
   }
 

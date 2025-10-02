@@ -7,6 +7,7 @@ import space.vendas.sistema.domain.Evento;
 import space.vendas.sistema.domain.User;
 import space.vendas.sistema.dto.event.EventDTO;
 import space.vendas.sistema.dto.user.UserDTO;
+import space.vendas.sistema.enums.UserType;
 import space.vendas.sistema.repository.UserRepository;
 
 import java.time.LocalDateTime;
@@ -37,6 +38,10 @@ public class UserService {
         .peek(user -> user.setInscriptions(List.of()))
         .collect(Collectors.toList());
     return users;
+  }
+
+  public List<UserDTO> findUsersByType(UserType type){
+    return userRepository.findByType(type).stream().map(this::toDto).toList();
   }
 
   private User toEntity(UserDTO dto){

@@ -9,7 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
 import space.vendas.sistema.enums.UserType;
+import space.vendas.sistema.validation.DeveTerNumeros;
 
 import java.time.LocalDateTime;
 
@@ -28,6 +30,7 @@ public class UserDTO {
   @Size(min = 10, max = 150, message = "O email deve ter no maximo 150 caracteres")
   private String email;
 
+  @DeveTerNumeros
   @NotBlank(message = "a senha precisa ser preenchida")
   @Size(min = 6, max = 150, message = "O email deve ter entre 6 e 150 caracteres")
   private String password;
@@ -38,8 +41,7 @@ public class UserDTO {
   private String phoneNumber;
 
   @NotBlank(message = "O CPF precisa ser preenchido")
-  @Size(max = 15, message = "O CPF deve ter 15 caracteres com formato 123.456.789-12")
-  @JsonFormat(pattern = "###.###.###-##")
+  @CPF
   private String documentCpf;
 
   @NotNull(message = "O tipo de usuario precisa ser preenchido")

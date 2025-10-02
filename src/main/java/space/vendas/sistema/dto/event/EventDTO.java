@@ -34,11 +34,11 @@ public class EventDTO {
   private String address;
 
   @NotNull(message = "A data de inicio do evento deve ser preenchido.")
-  @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
+  @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
   private LocalDateTime dateStart;
 
   @NotNull(message = "A data de finalização do evento deve ser preenchido.")
-  @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
+  @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
   private LocalDateTime dateEnd;
 
   private String linkEvent;

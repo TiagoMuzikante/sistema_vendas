@@ -9,7 +9,10 @@ import space.vendas.sistema.domain.Evento;
 import space.vendas.sistema.dto.event.EventDTO;
 import space.vendas.sistema.repository.EventRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,6 +31,15 @@ public class EventoService {
 
   public List<Evento> findAll(){
     return eventRepository.findAll();
+  }
+
+  public List<EventDTO> findAllBetweenDates(LocalDate startDate, LocalDate endDate){
+
+    List<Evento> events = new ArrayList<>();
+        events.addAll(eventRepository.findAllByDateStartLessThanEqualAndDateEndGreaterThanEqual(endDate.atTime(LocalTime.MAX), startDate.atStartOfDay()));
+        events.addAll(eventRepository.findAllByDateEndLessThanEqualAndDateEndGreaterThanEqual(endDate.atTime(LocalTime.MAX), startDate.atStartOfDay()));
+    return events.stream().distinct().map(this::toDto).toList();
+
   }
 
   private Evento toEntity(EventDTO dto){

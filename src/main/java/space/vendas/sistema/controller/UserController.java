@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import space.vendas.sistema.domain.User;
 import space.vendas.sistema.dto.user.UserDTO;
+import space.vendas.sistema.enums.UserType;
 import space.vendas.sistema.service.UserService;
 
 import java.util.List;
@@ -19,13 +20,18 @@ public class UserController {
   private final UserService userService;
 
   @PostMapping
-  public ResponseEntity<User> save(@RequestBody UserDTO userPostDTO){
-    return new ResponseEntity<>(userService.save(userPostDTO), HttpStatus.CREATED);
+  public ResponseEntity<UserDTO> save(@RequestBody UserDTO userDTO){
+    return new ResponseEntity<>(userService.save(userDTO), HttpStatus.CREATED);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<User> findById(@PathVariable UUID id){
+  public ResponseEntity<User> findById(@PathVariable Long id){
     return ResponseEntity.ok(userService.findById(id));
+  }
+
+  @GetMapping("/clientes")
+  public ResponseEntity<List<UserDTO>> findClients(){
+    return ResponseEntity.ok(userService.findUsersByType(UserType.NORMAL));
   }
 
   @GetMapping
@@ -34,12 +40,12 @@ public class UserController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<User> replace(@PathVariable UUID id, @RequestBody UserDTO userPostDTO){
-    return ResponseEntity.ok(userService.update(id, userPostDTO));
+  public ResponseEntity<UserDTO> replace(@PathVariable Long id, @RequestBody UserDTO userDTO){
+    return ResponseEntity.ok(userService.update(id, userDTO));
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> destroy(@PathVariable UUID id){
+  public ResponseEntity<UserDTO> destroy(@PathVariable Long id){
     userService.destroy(id);
     return null;
   }

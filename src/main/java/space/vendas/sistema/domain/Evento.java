@@ -41,10 +41,10 @@ public class Evento {
   private String address;
 
   @Column(nullable = false)
-  private Date dateStart;
+  private LocalDateTime dateStart;
 
   @Column(nullable = false)
-  private Date dateEnd;
+  private LocalDateTime dateEnd;
 
   @Column(nullable = true)
   private String linkEvent;
