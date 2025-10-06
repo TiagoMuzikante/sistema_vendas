@@ -4,16 +4,17 @@ import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.hibernate.generator.EventType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import space.vendas.sistema.domain.Evento;
 import space.vendas.sistema.dto.event.EventDTO;
+import space.vendas.sistema.enums.EventEnum;
 import space.vendas.sistema.service.EventoService;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -33,6 +34,11 @@ public class EventController {
   @GetMapping("/{id}")
   public ResponseEntity<Evento> findById(@PathVariable Long id){
     return ResponseEntity.ok(eventService.findById(id));
+  }
+
+  @GetMapping("/filter/{filter}")
+  public ResponseEntity<List<EventDTO>> filterBytype(@PathVariable EventEnum filter){
+    return ResponseEntity.ok(eventService.findAllByType(filter));
   }
 
   @GetMapping("/por-datas")

@@ -3,10 +3,12 @@ package space.vendas.sistema.service;
 import com.fasterxml.jackson.databind.util.BeanUtil;
 import jdk.jfr.Event;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.generator.EventType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import space.vendas.sistema.domain.Evento;
 import space.vendas.sistema.dto.event.EventDTO;
+import space.vendas.sistema.enums.EventEnum;
 import space.vendas.sistema.repository.EventRepository;
 
 import java.time.LocalDate;
@@ -31,6 +33,10 @@ public class EventoService {
 
   public List<Evento> findAll(){
     return eventRepository.findAll();
+  }
+
+  public List<EventDTO> findAllByType(EventEnum type){
+    return eventRepository.findAllByType(type).stream().map(this::toDto).toList();
   }
 
   public List<EventDTO> findAllBetweenDates(LocalDate startDate, LocalDate endDate){
