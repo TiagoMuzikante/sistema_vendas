@@ -14,6 +14,7 @@ import space.vendas.sistema.enums.UserType;
 import space.vendas.sistema.validation.DeveTerNumeros;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -47,8 +48,8 @@ public class UserDTO {
   @NotNull(message = "O tipo de usuario precisa ser preenchido")
   private UserType type;
 
-  @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
+  @JsonFormat(pattern = "dd-MM-yyyy")
   @NotNull(message = "A daa de aniversario precisa ser preenchida")
-  private LocalDateTime birthday;
+  private Date birthday;
 
 }

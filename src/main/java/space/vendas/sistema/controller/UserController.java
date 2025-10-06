@@ -29,9 +29,9 @@ public class UserController {
     return ResponseEntity.ok(userService.findById(id));
   }
 
-  @GetMapping("/clientes")
-  public ResponseEntity<List<UserDTO>> findClients(){
-    return ResponseEntity.ok(userService.findUsersByType(UserType.NORMAL));
+  @GetMapping("/filter/{filter}")
+  public ResponseEntity<List<UserDTO>> findClients(@PathVariable UserType filter){
+    return ResponseEntity.ok(userService.findUsersByType(filter));
   }
 
   @GetMapping
