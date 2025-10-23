@@ -2,6 +2,7 @@ package space.vendas.sistema.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import space.vendas.sistema.domain.Evento;
 import space.vendas.sistema.domain.User;
@@ -20,9 +21,12 @@ import java.util.stream.Collectors;
 public class UserService {
 
   private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
   public UserDTO save(UserDTO dto){
-    return toDto(userRepository.save(toEntity(dto)));
+    User user = toEntity(dto);
+    user.setPassword(passwordEncoder.encode(dto.getPassword()));
+    return toDto(userRepository.save(user));
   }
 
   public User findById(Long id){
@@ -38,6 +42,14 @@ public class UserService {
         .peek(user -> user.setInscriptions(List.of()))
         .collect(Collectors.toList());
     return users;
+  }
+
+  public boolean autenticar(String email, String password){
+    User user = userRepository.findUserByEmail(email);
+    if(user != null){
+      return passwordEncoder.matches(password, user.getPassword());
+    }
+    return false;
   }
 
   public List<UserDTO> findUsersByType(UserType type){

@@ -1,6 +1,7 @@
 package space.vendas.sistema.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -34,10 +35,10 @@ public class UserDTO {
   @DeveTerNumeros
   @NotBlank(message = "a senha precisa ser preenchida")
   @Size(min = 6, max = 150, message = "O email deve ter entre 6 e 150 caracteres")
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private String password;
 
   @NotBlank(message = "a senha precisa ser preenchida")
-  @Size(min = 14, max = 20, message = "O numero de telefone deve ter entre 14 e 20 caracteres")
   @JsonFormat(pattern = "## #####-####")
   private String phoneNumber;
 

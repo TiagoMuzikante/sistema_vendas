@@ -1,5 +1,6 @@
 package space.vendas.sistema.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class UserController {
   private final UserService userService;
 
   @PostMapping
-  public ResponseEntity<UserDTO> save(@RequestBody UserDTO userDTO){
+  public ResponseEntity<UserDTO> save(@RequestBody @Valid UserDTO userDTO){
     return new ResponseEntity<>(userService.save(userDTO), HttpStatus.CREATED);
   }
 
